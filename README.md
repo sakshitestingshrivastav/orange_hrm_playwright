@@ -10,9 +10,18 @@ Automated end-to-end tests for [OrangeHRM](https://www.orangehrm.com/) using [Pl
 ## Setup
 
 ```bash
-npm install
+npm init -y
+npm install -D @playwright/test typescript
 npx playwright install
 ```
+
+### What these commands do
+
+| Command | Purpose |
+|---|---|
+| `npm init -y` | Creates `package.json` (marks this folder as an npm project) |
+| `npm install -D @playwright/test typescript` | Installs Playwright test framework + TypeScript as dev dependencies |
+| `npx playwright install` | Downloads browser binaries (Chromium, Firefox, WebKit) |
 
 ## Running tests
 
