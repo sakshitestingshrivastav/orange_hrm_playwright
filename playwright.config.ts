@@ -2,11 +2,21 @@ import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const requiredEnv = ['BASE_URL', 'ADMIN_USERNAME', 'ADMIN_PASSWORD'] as const;
+
+for (const key of requiredEnv) {
+  if (!process.env[key]) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+}
+
 export default defineConfig({
   testDir: './tests',
   reporter: 'html', // view the report with npx playwright show-report
   retries: 1, // retries once more before reporting failure
   timeout: 60_000, //One test can run max 60 seconds (60,000 ms). After that → fail
+  fullyParallel: true, // run tests in parallel
+  workers: process.env.CI ? 2 : 4, // number of workers to use for parallel execution
   projects: [
     // list set of browser you want to use the test execution on multiple browser
     {
