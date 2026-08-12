@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": {
+    "student_id": 101,
+    "firstName": "Suber",
+    "lastName": "Panchal",
+    "email": "suber@example.com",
+    "role_number": "100234100",
+    "standard": "10"
+  }
+}
