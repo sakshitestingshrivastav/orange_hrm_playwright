@@ -24,10 +24,10 @@ jobs:
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Check formatting    #quality of code checking before pushing the code
+      - name: Check formatting #quality of code checking before pushing the code
         run: npm run format:check
 
-      - name: Run ESLint      #quality check before pushing the code
+      - name: Run ESLint #quality check before pushing the code
         run: npm run lint
 
       - name: Run smoke tests
