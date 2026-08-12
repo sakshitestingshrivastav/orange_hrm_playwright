@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "body": {
+    "id": 101,
+    "firstName": "Sakshi",
+    "lastName": "Shrivastav",
+    "email": "sakshi@example.com",
+    "role": "Admin"
+  }
+}
