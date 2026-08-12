@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import studentMock from '../../src/mocks/api/student.mock.json';
 
-test('should return student details from mock API @api', async ({ page }) => {
+test('@regression should return student details from mock API @api', async ({ page }) => {
   // Intercept the not-ready endpoint and return mock data
   await page.route('**/api/student/101', async (route) => {
     await route.fulfill({
