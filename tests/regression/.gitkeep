@@ -1,0 +1,2 @@
+# Put regression specs here, e.g. login.regression.spec.ts
+# Or keep tests elsewhere and add @regression in the test title.

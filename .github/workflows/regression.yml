@@ -1,0 +1,59 @@
+name: Regression Tests
+
+on:
+  workflow_dispatch:   # Manual only — run from GitHub Actions UI
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run regression tests
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          status=0
+
+          # 1) All tests inside tests/regression folder
+          npx playwright test tests/regression --project=chromium --pass-with-no-tests || status=1
+
+          # 2) Any test whose title contains @regression (any folder)
+          npx playwright test --grep "@regression" --project=chromium --pass-with-no-tests || status=1
+
+          exit $status
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regression-diagnostics
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+
+      - name: Notify Slack on failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\":\"❌ *Regression suite failed*\\nRepo: ${{ github.repository }}\\nBranch: ${{ github.ref_name }}\\nRun: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "$SLACK_WEBHOOK_URL"
