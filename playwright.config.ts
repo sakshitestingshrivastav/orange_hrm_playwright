@@ -12,7 +12,12 @@ for (const key of requiredEnv) {
 
 export default defineConfig({
   testDir: './tests',
-  reporter: 'html', // view the report with npx playwright show-report
+  reporter: [
+    ['list'],
+    ['html', { open: 'never' }],
+    // Auto AI-ready failure notes (optional live AI if OPENAI_API_KEY is set)
+    ['./src/reporters/ai-failure-reporter.ts'],
+  ],
   retries: 1, // retries once more before reporting failure
   timeout: 60_000, //One test can run max 60 seconds (60,000 ms). After that → fail
   fullyParallel: true, // run tests in parallel
