@@ -34,6 +34,7 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
         # Combination: sharding (matrix) + parallel (workers from playwright.config.ts on CI = 2)
         run: npx playwright test tests/smoke --project=chromium --shard=${{ matrix.shard }}/2
 
