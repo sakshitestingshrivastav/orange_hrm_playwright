@@ -4,3 +4,4 @@ playwright-report/
 reports/
 playwright/.cache/
 .env
+playwright/.auth/

@@ -23,14 +23,22 @@ export default defineConfig({
   fullyParallel: true, // run tests in parallel
   workers: process.env.CI ? 2 : 1, // number of workers to use for parallel execution
   projects: [
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
     // list set of browser you want to use the test execution on multiple browser
     {
       name: 'chromium', //if you want to run on only one browser npx playwright test --project=chromium
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: { ...devices['Desktop Firefox'], storageState: 'playwright/.auth/user.json' },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
     },
   ],
   use: {
