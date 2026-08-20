@@ -36,6 +36,14 @@ jobs:
           ADMIN_USERNAME: ${{ secrets.ADMIN_USERNAME }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           DASHBOARD_URL: ${{ secrets.DASHBOARD_URL }}
+          # Failure emails only for this smoke/sanity CI job
+          SEND_FAILURE_EMAIL: true
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+          ALERT_EMAIL_FROM: ${{ secrets.ALERT_EMAIL_FROM }}
         run: npx playwright test tests/smoke --project=chromium
 
       - name: Upload failure diagnostics

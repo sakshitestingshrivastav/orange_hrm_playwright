@@ -10,13 +10,10 @@ export class DashboardPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    // Top bar page title on OrangeHRM dashboard
     this.pageHeading = page.locator('.oxd-topbar-header-breadcrumb-module');
-    // Left sidebar menu items
     this.recruitment = page.locator('nav').getByRole('link', { name: 'Recruitment' });
     this.myInfo = page.locator('nav').getByRole('link', { name: 'My Info' });
     this.performance = page.locator('nav').getByRole('link', { name: 'Performance' });
-    // Header Upgrade CTA
     this.upgradeButton = page.getByRole('button', { name: /Upgrade/i });
   }
 

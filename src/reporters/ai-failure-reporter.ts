@@ -11,7 +11,7 @@ dotenv.config();
  * Small AI helper for the framework:
  * 1) Always writes an AI-ready failure note under reports/ai-failures/
  * 2) If OPENAI_API_KEY exists, also asks OpenAI for a short diagnosis
- * 3) If SMTP env vars exist, emails the failure report
+ * 3) Emails only in CI when SEND_FAILURE_EMAIL=true (smoke/sanity workflow)
  */
 class AiFailureReporter implements Reporter {
   private outputDir = path.join(process.cwd(), 'reports', 'ai-failures');
@@ -93,6 +93,13 @@ class AiFailureReporter implements Reporter {
     });
   }
 
+  /** Email only when both: running in CI, and smoke/sanity opted in via SEND_FAILURE_EMAIL. */
+  private shouldSendEmail(): boolean {
+    const inCi = process.env.CI === 'true';
+    const emailEnabled = process.env.SEND_FAILURE_EMAIL === 'true';
+    return inCi && emailEnabled;
+  }
+
   private async sendFailureEmail(details: {
     title: string;
     status: string;
@@ -100,8 +107,14 @@ class AiFailureReporter implements Reporter {
     errorMessage: string;
     filePath: string;
   }): Promise<void> {
+    if (!this.shouldSendEmail()) {
+      console.log(
+        'Email skipped: only sent in CI for smoke/sanity (CI=true and SEND_FAILURE_EMAIL=true).',
+      );
+      return;
+    }
+
     const host = process.env.SMTP_HOST;
-    const port = Number(process.env.SMTP_PORT || 587);
     const user = process.env.SMTP_USER;
     const pass = (process.env.SMTP_PASS || '').replace(/\s+/g, '');
     const to = process.env.ALERT_EMAIL_TO;
@@ -109,7 +122,7 @@ class AiFailureReporter implements Reporter {
 
     if (!host || !user || !pass || !to) {
       console.log(
-        'Email skipped: set SMTP_HOST, SMTP_USER, SMTP_PASS, ALERT_EMAIL_TO in .env to enable.',
+        'Email skipped: set SMTP_HOST, SMTP_USER, SMTP_PASS, ALERT_EMAIL_TO secrets in CI.',
       );
       return;
     }
