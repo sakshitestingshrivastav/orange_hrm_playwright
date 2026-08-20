@@ -21,7 +21,7 @@ export default defineConfig({
   retries: 1, // retries once more before reporting failure
   timeout: 60_000, //One test can run max 60 seconds (60,000 ms). After that → fail
   fullyParallel: true, // run tests in parallel
-  workers: process.env.CI ? 2 : 4, // number of workers to use for parallel execution
+  workers: process.env.CI ? 2 : 1, // number of workers to use for parallel execution
   projects: [
     // list set of browser you want to use the test execution on multiple browser
     {

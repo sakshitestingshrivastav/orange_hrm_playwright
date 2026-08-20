@@ -25,12 +25,14 @@ test.describe('Dashboard page', () => {
     await expect(page.url()).toContain('/viewPersonalDetails/');
   });
 
-  test.only('Verify', async ({ page }) => {
+  test('Verify that updating gender on my info page updates the gender', async ({ page }) => {
     const dashboardPage = new DashboardPage(page);
     await expect(page).toHaveURL(process.env.DASHBOARD_URL!, { timeout: 30_000 });
     await page.getByText('My Info').click();
     await expect(page.url()).toContain('/viewPersonalDetails/');
-    await page.locator('input[type="radio"]', { hasText: 'Female' }).check();
+    await page.getByRole('radio', { name: 'Female' }).click({ force: true });
+    await page.getByRole('button', { name: 'Save' }).first().click();
+    await expect(page.getByText('Successfully Updated')).toBeVisible();
   });
 
   test('Verify that clicking on upgrade link opens a new tab', async ({ page }) => {
