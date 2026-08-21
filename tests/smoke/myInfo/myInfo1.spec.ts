@@ -43,14 +43,19 @@ test.describe('My Info page', () => {
     await expect(page.getByText('Should not exceed 30 characters')).toBeVisible();
   });
 
-  test.only('Verify that user is able to enter driver value input', async ({ page }) => {
+  test('Verify that user is able to enter driver value input', async ({ page }) => {
     await page.getByText('My Info').click();
     await expect(page.url()).toContain('/viewPersonalDetails/');
-    const driverLicense = page
-      .locator('.oxd-input-group')
-      .filter({ hasText: "Driver's License Number" })
-      .locator('input');
+    const driverLicense = page.getByRole('textbox', { name: "Driver's License Number" });
     await driverLicense.fill('123456');
     await expect(driverLicense).toHaveValue('123456');
+  });
+
+  test('Verify that user is able to enter other id input', async ({ page }) => {
+    await page.getByText('My Info').click();
+    await expect(page.url()).toContain('/viewPersonalDetails/');
+    const otherId = page.locator('.oxd-input-group', { hasText: 'Other Id' }).locator('input');
+    await otherId.fill('123456');
+    await expect(otherId).toHaveValue('123456');
   });
 });
