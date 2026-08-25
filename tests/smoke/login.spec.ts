@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../../src/pages/LoginPage';
 
+// Login tests must start logged out (ignore saved session)
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test('should login with valid admin credentials', async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto('/web/index.php/auth/login');
@@ -53,4 +56,6 @@ test('should login with valid password and invalid username', async ({ page }) =
     process.env.ADMIN_PASSWORD!,
   );
   await expect(page.getByText('Invalid credentials')).toBeVisible();
+  await page.screenshot({ path: 'screenshots/invalid_credentials.png' });
 });
+

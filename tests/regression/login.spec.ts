@@ -1,7 +1,13 @@
 import { test, expect } from '@playwright/test';
 import { generateString } from '../../src/utils/helper';
+import { firefox } from 'playwright';
 
-test('should login with valid admin credentials', async ({ page }) => {
+// Login tests must start logged out (ignore saved session)
+test.use({ storageState: { cookies: [], origins: [] } });
+
+test('should login with valid admin credentials', async () => {
+  const browser = await firefox.launch(); // headed: { headless: false }
+  const page = await browser.newPage();
   await page.goto('/web/index.php/auth/login');
   await expect(page.locator('input[name="username"]')).toBeVisible();
   await expect(page.locator('input[name="password"]')).toBeVisible();
@@ -10,6 +16,7 @@ test('should login with valid admin credentials', async ({ page }) => {
   await expect(page.locator('button[type="submit"]')).toBeVisible();
   await page.locator('button[type="submit"]').click();
   await expect(page).toHaveURL(/dashboard/);
+  await browser.close();
 });
 
 test('should login with invalid admin credentials', async ({ page }) => {
