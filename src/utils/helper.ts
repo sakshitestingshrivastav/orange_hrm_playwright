@@ -8,8 +8,8 @@ export function generateString(length: number) {
   return result;
 }
 
-export function generateNumber(length:number){
-  const numbers = [0,1,2,3,4,5,6,7,8,9];
+export function generateNumber(length: number) {
+  const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   let result = '';
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * numbers.length);
@@ -19,7 +19,6 @@ export function generateNumber(length:number){
 }
 
 export function randomEmailGenerator() {
-  const email =
-    generateString(10) + generateNumber(5) + '@' + generateString(5) + '.com';
+  const email = generateString(10) + generateNumber(5) + '@' + generateString(5) + '.com';
   return email;
 }

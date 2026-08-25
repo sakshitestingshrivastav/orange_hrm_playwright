@@ -58,4 +58,3 @@ test('should login with valid password and invalid username', async ({ page }) =
   await expect(page.getByText('Invalid credentials')).toBeVisible();
   await page.screenshot({ path: 'screenshots/invalid_credentials.png' });
 });
-
