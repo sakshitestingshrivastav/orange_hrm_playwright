@@ -29,8 +29,9 @@ export default defineConfig({
     },
     // list set of browser you want to use the test execution on multiple browser
     {
-      name: 'chromium', //if you want to run on only one browser npx playwright test --project=chromium
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
+      name: 'chrome-branded', //if you want to run on only one browser npx playwright test --project=chromium
+      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json', channel: 'chrome' },
+      //sepcifying channel so that all test would run in that google chrome actual browser
       dependencies: ['setup'],
       testIgnore: /.*\.setup\.ts/,
     },
@@ -42,6 +43,7 @@ export default defineConfig({
     },
   ],
   use: {
+    headless: process.env.CI ? true : true,   // default; you can omit this line entirely , but we can configure here in use
     baseURL: process.env.BASE_URL,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
